@@ -44,47 +44,72 @@
 
 });
 
-database.ref().on("child_added",function(childSnapshot) {
+setInterval(function() {
+  database.ref().once("value", function(snapshot){
+    let trains = data.val()
+    for (const key in trains) {
+      let train = trains[key]
+      database.ref().child(key).set({
+        name: train.name,
+        destination: train.destination,
+        trainTime: train.trainTime,
+        frequency: train.frequency,
+        trainTime: train.trainTime,
+        minsTill: train.tMinutesTillTrain,
+    })
+    }
 
+  })
+}, 15000)
 
-  // var updatedTrain = childSnapshot.val().trainTime;
-  // var updatedFrequency = childSnapshot.val().frequency;
-  // var updatedDiffTime = moment().diff(moment(updatedTrain), "minutes")
-  // var updatedRemainder = updatedDiffTime % updatedFrequency;
-  // var updatedMinutes = updatedFrequency - updatedRemainder
-
-  // moment(updatedDiffTime).format("HH:mm");
-  // console.log(updatedDiffTime);
+function display(data) {
   
-  // var test1 = moment(nextTrain).format("HH:mm");
-  // console.log(test1)
+var trains = data.val();
+var table = $("#trainSchedule");
+table.empty();
 
-  var newRow = $("<tr>")
-  var newTrain=$("<td></td>").text(childSnapshot.val().name);
-  var newDestination=$("<td></td>").text(childSnapshot.val().destination);
+for (const key in trains) {
   
-  var newFrequency=$("<td></td>").text(childSnapshot.val().frequency);
+  let train = trains[key] 
+  console.log(train)
+  let row = $("<tr>").append($("<td>").text(train.name))
+    .append($("<td>").text(train.destination))
+    .append($("<td>").text(train.frequency))
+    .append($("<td>").text(train.trainTime))
+    .append($("<td>").text(train.nextTrain))
+    table.append(row)
+  }
+}
+
+database.ref().on("value", display)  
+
+
+
+
+  // var newRow = $("<tr>")
+  // var newTrain=$("<td></td>").text(childSnapshot.val().name);
+  // var newDestination=$("<td></td>").text(childSnapshot.val().destination);
+  // var newFrequency=$("<td></td>").text(childSnapshot.val().frequency);
+  // var newTime=$("<td></td>").text(childSnapshot.val().trainTime);
  
-  var newTime=$("<td></td>").text(childSnapshot.val().trainTime);
- 
-  var tMinutesTillTrainTest = $("<td></td>").text(childSnapshot.val().nextTrain)
+  // var tMinutesTillTrainTest = $("<td></td>").text(childSnapshot.val().nextTrain)
   
   
   
   
   
-  newRow.append(newTrain);
-  newRow.append(newDestination);
-  newRow.append(newFrequency);
-  newRow.append(newTime);
-  newRow.append(tMinutesTillTrainTest)
+  // newRow.append(newTrain);
+  // newRow.append(newDestination);
+  // newRow.append(newFrequency);
+  // newRow.append(newTime);
+  // newRow.append(tMinutesTillTrainTest)
   
-  $("#trainSchedule").append(newRow);
+  // $("#trainSchedule").append(newRow);
 
   
   
   
-  });
+  
 
  
 
