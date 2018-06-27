@@ -25,7 +25,7 @@
   var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
   var tRemainder = diffTime % frequency;
   var tMinutesTillTrain = frequency - tRemainder;
-  
+
   var nextTrain = moment().add(tMinutesTillTrain, "minutes");
   var test = moment(nextTrain).format("HH:mm")
  
@@ -66,9 +66,9 @@ database.ref().on("child_added",function(childSnapshot) {
   var newFrequency=$("<td></td>").text(childSnapshot.val().frequency);
  
   var newTime=$("<td></td>").text(childSnapshot.val().trainTime);
-  var nextTrain=$("<td></td>").text(moment().add(nextTrain, "minutes"));
-
-  console.log(nextTrain)
+ 
+  var tMinutesTillTrainTest = $("<td></td>").text(childSnapshot.val().nextTrain)
+  
   
   
   
@@ -77,7 +77,7 @@ database.ref().on("child_added",function(childSnapshot) {
   newRow.append(newDestination);
   newRow.append(newFrequency);
   newRow.append(newTime);
-  newRow.append(nextTrain);
+  newRow.append(tMinutesTillTrainTest)
   
   $("#trainSchedule").append(newRow);
 
